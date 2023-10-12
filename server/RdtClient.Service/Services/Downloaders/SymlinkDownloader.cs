@@ -130,7 +130,7 @@ public class SymlinkDownloader : IDownloader
             if (file.Exists)
             {
                 return file; // Return the file if it exists
-                logger.Error($"file found {file}");
+                // logger.Error($"file found {file}");
             }
 
             // If the file is not found at the specified path, you can get the directory
