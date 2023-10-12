@@ -77,7 +77,8 @@ namespace RdtClient.Service.Services.Downloaders
                 while (file == null && tries <= Settings.Get.Integrations.Default.DownloadRetryAttempts)
                 {
                     _logger.Debug($"Searching {Settings.Get.DownloadClient.RcloneMountPath} for {fileName} ({tries})...");
-                    file = TryGetFile(fileName);
+                    // First, try to find the file in the combinedPath
+                    file = TryGetFile(fileName, combinedPath);
                     await Task.Delay(1000);
                     tries++;
                 }
