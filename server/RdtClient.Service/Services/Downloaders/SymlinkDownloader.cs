@@ -123,19 +123,42 @@ public class SymlinkDownloader : IDownloader
     }
         private static FileInfo? TryGetFile(string Name)
         {
-                var dirInfo = new DirectoryInfo(Settings.Get.DownloadClient.RcloneMountPath);
+            var dirInfo = new DirectoryInfo(Settings.Get.DownloadClient.RcloneMountPath);
 
-            // Get the subdirectories sorted by creation date in descending order
+
+             while (true)
+            {
+                // Get the subdirectories sorted by creation date in descending order
                 var sortedDirectories = dirInfo.GetDirectories()
                     .OrderByDescending(d => d.CreationTime)
                     .ToList();
 
-            foreach (var dir in sortedDirectories)
-            {
-                var files = dir.EnumerateFiles();
-                var file = files.FirstOrDefault(f => f.Name == Name);
-                if (file != null) { return file; }
+                foreach (var dir in sortedDirectories)
+                {
+                    var files = dir.EnumerateFiles();
+                    var file = files.FirstOrDefault(f => f.Name == Name);
+                    if (file != null)
+                    {
+                        return file; // File found, return it
+                    }
+                }
+
+                // If the code reaches here, it means the file was not found in subdirectories.
+                // Continue the while loop to start the search again.
             }
-            return dirInfo.EnumerateFiles().FirstOrDefault(f => f.Name == Name);
+
+
+            // // Get the subdirectories sorted by creation date in descending order
+            //     var sortedDirectories = dirInfo.GetDirectories()
+            //         .OrderByDescending(d => d.CreationTime)
+            //         .ToList();
+
+            // foreach (var dir in sortedDirectories)
+            // {
+            //     var files = dir.EnumerateFiles();
+            //     var file = files.FirstOrDefault(f => f.Name == Name);
+            //     if (file != null) { return file; }
+            // }
+            // return dirInfo.EnumerateFiles().FirstOrDefault(f => f.Name == Name);
         }
 }

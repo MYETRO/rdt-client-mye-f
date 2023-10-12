@@ -12,7 +12,7 @@ RUN apk add --no-cache git python3 py3-pip make g++
 
 RUN \
    echo "**** Cloning Source Code ****" && \
-   git clone -b symlink_downloader_concurrency https://github.com/Gaisberg/rdt-client.git . && \
+   git clone -b dev-branch https://github.com/MYETRO/rdt-client-mye-f.git . && \
    cd client && \
    echo "**** Building Code  ****" && \
    npm ci && \
@@ -32,7 +32,7 @@ WORKDIR /appserver
 
 RUN \
    echo "**** Cloning Source Code ****" && \
-   git clone -b symlink_downloader_concurrency https://github.com/Gaisberg/rdt-client.git . && \
+   git clone -b dev-branch https://github.com/MYETRO/rdt-client-mye-f.git . && \
    echo "**** Building Source Code for $TARGETPLATFORM on $BUILDPLATFORM ****" && \
    cd server && \
    if [ "$TARGETPLATFORM" = "linux/arm/v7" ] ; then \
