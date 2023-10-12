@@ -121,44 +121,74 @@ public class SymlinkDownloader : IDownloader
             return false;
         }
     }
-        private static FileInfo? TryGetFile(string Name)
+
+        private static FileInfo? TryGetFile(string filePath)
         {
-            var dirInfo = new DirectoryInfo(Settings.Get.DownloadClient.RcloneMountPath);
-
-
-             while (true)
+            var file = new FileInfo(filePath);
+            
+            // Check if the file exists at the provided path
+            if (file.Exists)
             {
-                // Get the subdirectories sorted by creation date in descending order
-                var sortedDirectories = dirInfo.GetDirectories()
-                    .OrderByDescending(d => d.CreationTime)
-                    .ToList();
-
-                foreach (var dir in sortedDirectories)
-                {
-                    var files = dir.EnumerateFiles();
-                    var file = files.FirstOrDefault(f => f.Name == Name);
-                    if (file != null)
-                    {
-                        return file; // File found, return it
-                    }
-                }
-
-                // If the code reaches here, it means the file was not found in subdirectories.
-                // Continue the while loop to start the search again.
+                return file; // Return the file if it exists
+                logger.Error($"file found {file}");
             }
 
+            // If the file is not found at the specified path, you can get the directory
+            var dirInfo = file.Directory;
 
-            // // Get the subdirectories sorted by creation date in descending order
-            //     var sortedDirectories = dirInfo.GetDirectories()
-            //         .OrderByDescending(d => d.CreationTime)
-            //         .ToList();
+            if (dirInfo != null)
+            {
+                var filesInDirectory = dirInfo.EnumerateFiles();
+                var fileInDirectory = filesInDirectory.FirstOrDefault(f => f.Name == file.Name);
 
-            // foreach (var dir in sortedDirectories)
-            // {
-            //     var files = dir.EnumerateFiles();
-            //     var file = files.FirstOrDefault(f => f.Name == Name);
-            //     if (file != null) { return file; }
-            // }
-            // return dirInfo.EnumerateFiles().FirstOrDefault(f => f.Name == Name);
+                if (fileInDirectory != null)
+                {
+                    return fileInDirectory; // Return the file found in the directory
+                }
+            }
+
+            // If the file is not found in the specified directory, return null.
+            return null;
         }
+
+        // private static FileInfo? TryGetFile(string Name)
+        // {
+        //     var dirInfo = new DirectoryInfo(Settings.Get.DownloadClient.RcloneMountPath);
+
+
+        //      while (true)
+        //     {
+        //         // Get the subdirectories sorted by creation date in descending order
+        //         var sortedDirectories = dirInfo.GetDirectories()
+        //             .OrderByDescending(d => d.CreationTime)
+        //             .ToList();
+
+        //         foreach (var dir in sortedDirectories)
+        //         {
+        //             var files = dir.EnumerateFiles();
+        //             var file = files.FirstOrDefault(f => f.Name == Name);
+        //             if (file != null)
+        //             {
+        //                 return file; // File found, return it
+        //             }
+        //         }
+
+        //         // If the code reaches here, it means the file was not found in subdirectories.
+        //         // Continue the while loop to start the search again.
+        //     }
+
+
+        //     // // Get the subdirectories sorted by creation date in descending order
+        //     //     var sortedDirectories = dirInfo.GetDirectories()
+        //     //         .OrderByDescending(d => d.CreationTime)
+        //     //         .ToList();
+
+        //     // foreach (var dir in sortedDirectories)
+        //     // {
+        //     //     var files = dir.EnumerateFiles();
+        //     //     var file = files.FirstOrDefault(f => f.Name == Name);
+        //     //     if (file != null) { return file; }
+        //     // }
+        //     // return dirInfo.EnumerateFiles().FirstOrDefault(f => f.Name == Name);
+        // }
 }
