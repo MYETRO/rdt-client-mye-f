@@ -237,7 +237,7 @@ public class SymlinkDownloader : IDownloader
         //         // Continue the while loop to start the search again.
         //     }
 
-    private static async Task<FileInfo?> TryGetFileAsync(string Name, string filePath)
+    private static async Task<FileInfo?> TryGetFileAsync(string Name)
     {
         var dirInfo = new DirectoryInfo(filePath);
 
