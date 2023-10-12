@@ -152,39 +152,39 @@ public class SymlinkDownloader : IDownloader
         // }
 
 
-        // static void Main(string[] args)
-        private static FileInfo? TryGetFile(string Name, string filePath)
-        {
-            // The directory that contains the subdirectories and files
-            string dir = @"C:\Users\test\Downloads";
+        // // static void Main(string[] args)
+        // private static FileInfo? TryGetFile(string Name, string filePath)
+        // {
+        //     // The directory that contains the subdirectories and files
+        //     string dir = @"C:\Users\test\Downloads";
 
-            // The file name to search for
-            string fileName = "79031V0 - Copy.jpg";
+        //     // The file name to search for
+        //     string fileName = "79031V0 - Copy.jpg";
 
-            // Get all the subdirectories in the directory
-            string[] subdirs = Directory.GetDirectories(dir);
+        //     // Get all the subdirectories in the directory
+        //     string[] subdirs = Directory.GetDirectories(dir);
 
-            // Loop through each subdirectory
-            foreach (string subdir in subdirs)
-            {
-                // Get the name of the subdirectory
-                string folderName = Path.GetFileName(subdir);
+        //     // Loop through each subdirectory
+        //     foreach (string subdir in subdirs)
+        //     {
+        //         // Get the name of the subdirectory
+        //         string folderName = Path.GetFileName(subdir);
 
-                // Search for the file in the subdirectory
-                string[] files = Directory.GetFiles(subdir, fileName);
+        //         // Search for the file in the subdirectory
+        //         string[] files = Directory.GetFiles(subdir, fileName);
 
-                // Check if the file was found
-                if (files.Length > 0)
-                {
-                    // Get the full path of the file
-                    string filePath = files[0];
+        //         // Check if the file was found
+        //         if (files.Length > 0)
+        //         {
+        //             // Get the full path of the file
+        //             string filePath = files[0];
 
-                    // Print a message with the folder name and file path
-                    'Console.WriteLine("The file {0} was found in folder {1} with path {2}", fileName, folderName, filePath);
-                    return file; // File found, return it
-                }
-            }
-        }
+        //             // Print a message with the folder name and file path
+        //             'Console.WriteLine("The file {0} was found in folder {1} with path {2}", fileName, folderName, filePath);
+        //             return file; // File found, return it
+        //         }
+        //     }
+        // }
 
 
         // // static void Main(string[] args)
