@@ -58,7 +58,7 @@ public class SymlinkDownloader : IDownloader
         while (file == null && tries <= Settings.Get.Integrations.Default.DownloadRetryAttempts)
         {
             _logger.Debug($"Searching {Settings.Get.DownloadClient.RcloneMountPath} for {fileName} ({tries})...");
-            file = TryGetFile(fileName);
+            file = TryGetFileAsync(fileName);
             await Task.Delay(1000);
             tries++;
         }
@@ -272,17 +272,17 @@ public class SymlinkDownloader : IDownloader
 
 
 
-        //     // // Get the subdirectories sorted by creation date in descending order
-        //     //     var sortedDirectories = dirInfo.GetDirectories()
-        //     //         .OrderByDescending(d => d.CreationTime)
-        //     //         .ToList();
+        //      // Get the subdirectories sorted by creation date in descending order
+        //          var sortedDirectories = dirInfo.GetDirectories()
+        //              .OrderByDescending(d => d.CreationTime)
+        //              .ToList();
 
-        //     // foreach (var dir in sortedDirectories)
-        //     // {
-        //     //     var files = dir.EnumerateFiles();
-        //     //     var file = files.FirstOrDefault(f => f.Name == Name);
-        //     //     if (file != null) { return file; }
-        //     // }
-        //     // return dirInfo.EnumerateFiles().FirstOrDefault(f => f.Name == Name);
+        //      foreach (var dir in sortedDirectories)
+        //      {
+        //          var files = dir.EnumerateFiles();
+        //          var file = files.FirstOrDefault(f => f.Name == Name);
+        //          if (file != null) { return file; }
+        //      }
+        //      return dirInfo.EnumerateFiles().FirstOrDefault(f => f.Name == Name);
         // }
 }
