@@ -38,7 +38,7 @@ public class SymlinkDownloader : IDownloader
 
         // Combine the folder name with the target directory
         var combinedPath = Path.Combine(targetDirectory, folderName);
-        _logger.Debug($"File is in directory: {directoryPath}");
+        _logger.Debug($"File is in directory: {combinedPath}");
 
 
         List<string> unWantedExtensions = new()
