@@ -31,6 +31,15 @@ public class SymlinkDownloader : IDownloader
         _logger.Debug($"Writing to path: ${filePath}");
         var fileName = Path.GetFileName(filePath);
         var fileExtension = Path.GetExtension(filePath);
+        // var directoryPath = Path.GetDirectoryName(filePath);
+        
+        var folderName = Path.GetFileName(Path.GetDirectoryName(filePath)); // Extract just the folder name
+        var targetDirectory = Settings.Get.DownloadClient.RcloneMountPath;
+
+        // Combine the folder name with the target directory
+        var combinedPath = Path.Combine(targetDirectory, folderName);
+        _logger.Debug($"File is in directory: {directoryPath}");
+
 
         List<string> unWantedExtensions = new()
         {
@@ -58,7 +67,7 @@ public class SymlinkDownloader : IDownloader
         while (file == null && tries <= Settings.Get.Integrations.Default.DownloadRetryAttempts)
         {
             _logger.Debug($"Searching {Settings.Get.DownloadClient.RcloneMountPath} for {fileName} ({tries})...");
-            file = TryGetFileAsync(fileName);
+            file = TryGetFile(fileName);
             await Task.Delay(1000);
             tries++;
         }
@@ -237,52 +246,56 @@ public class SymlinkDownloader : IDownloader
         //         // Continue the while loop to start the search again.
         //     }
 
-    private static async Task<FileInfo?> TryGetFileAsync(string Name)
-    {
-        var dirInfo = new DirectoryInfo(filePath);
+    // private static async Task<FileInfo?> TryGetFileAsync(string Name, string filePath)
+    // {
+    //     var dirInfo = new DirectoryInfo(filePath);
 
-        while (true)
+    //     while (true)
+    //     {
+    //         var sortedDirectories = await Task.Run(() =>
+    //         {
+    //             return dirInfo.GetDirectories()
+    //                 .OrderByDescending(d => d.CreationTime)
+    //                 .ToList();
+    //         });
+
+    //         foreach (var dir in sortedDirectories)
+    //         {
+    //             var files = dir.EnumerateFiles();
+    //             var file = files.FirstOrDefault(f => f.Name == Name);
+    //             if (file != null)
+    //             {
+    //                 return file; // File found, return it
+    //             }
+    //         }
+    //         // If the code reaches here, it means the file was not found in subdirectories.
+    //         // Continue the while loop to start the search again.
+    //     }
+    //     // If the while loop exits, it means the file was not found in subdirectories.
+    //     // Return null.
+    //     return null;
+    // }
+
+
+
+
+
+
+        private static FileInfo? TryGetFile(string Name)
         {
-            var sortedDirectories = await Task.Run(() =>
-            {
-                return dirInfo.GetDirectories()
+                var dirInfo = new DirectoryInfo(Settings.Get.DownloadClient.RcloneMountPath);
+
+            // Get the subdirectories sorted by creation date in descending order
+                var sortedDirectories = dirInfo.GetDirectories()
                     .OrderByDescending(d => d.CreationTime)
                     .ToList();
-            });
 
             foreach (var dir in sortedDirectories)
             {
                 var files = dir.EnumerateFiles();
                 var file = files.FirstOrDefault(f => f.Name == Name);
-                if (file != null)
-                {
-                    return file; // File found, return it
-                }
+                if (file != null) { return file; }
             }
-            // If the code reaches here, it means the file was not found in subdirectories.
-            // Continue the while loop to start the search again.
+            return dirInfo.EnumerateFiles().FirstOrDefault(f => f.Name == Name);
         }
-        // If the while loop exits, it means the file was not found in subdirectories.
-        // Return null.
-        return null;
-    }
-
-
-
-
-
-
-        //      // Get the subdirectories sorted by creation date in descending order
-        //          var sortedDirectories = dirInfo.GetDirectories()
-        //              .OrderByDescending(d => d.CreationTime)
-        //              .ToList();
-
-        //      foreach (var dir in sortedDirectories)
-        //      {
-        //          var files = dir.EnumerateFiles();
-        //          var file = files.FirstOrDefault(f => f.Name == Name);
-        //          if (file != null) { return file; }
-        //      }
-        //      return dirInfo.EnumerateFiles().FirstOrDefault(f => f.Name == Name);
-        // }
 }
